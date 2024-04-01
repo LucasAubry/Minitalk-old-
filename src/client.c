@@ -6,11 +6,28 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 17:36:02 by Laubry            #+#    #+#             */
-/*   Updated: 2024/03/25 13:52:38 by Laubry           ###   ########.fr       */
+/*   Updated: 2024/03/29 12:28:09 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+
+void len_of_bits(char **argv, int pid)
+{
+	int	i;
+	int bit;
+
+	bit = 0;
+	i =	ft_strlen(argv[2]);
+	while (bit < 32)
+	{
+		if ((i & (0x01 << bit)) != 0) 
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
+		bit++;
+	}
+}
 
 void	send_bit(int pid, char x)
 {
@@ -32,12 +49,14 @@ int	main(int argc, char **argv)
 	int	pid;
 	int	i;
 	
+	pid = 0;
 	i = 0;
 	if (argc == 3)
 	{
 		pid = ft_atoi(argv[1]);
 		if (pid <= 0)
 			return (1);
+		len_of_bits(argv, pid);
 		while(argv[2][i])
 		{
 			send_bit(pid, argv[2][i]);
@@ -47,7 +66,7 @@ int	main(int argc, char **argv)
 	}
 	else
 	{
-		ft_printf("il y a trop d'arguments");
+		ft_printf("les arguments sont pas bon");
 		return (1);
 	}
 	return (0);
