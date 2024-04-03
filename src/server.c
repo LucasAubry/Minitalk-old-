@@ -6,28 +6,28 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 17:36:50 by Laubry            #+#    #+#             */
-/*   Updated: 2024/04/01 14:07:45 by laubry           ###   ########.fr       */
+/*   Updated: 2024/04/03 17:30:22 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	bit_8_and_print(int bit, int i, int len, int boul)
+void	stock_and_print(char *tab, int i, int len, int bit, int boul)
 {
-	static char *tab;
-	static int x = 0;
+	static int	x;
 
-	if (bit == 8 && boul == 1)
-	{	
-		tab = malloc(sizeof(char) * len + 1);
-		tab[x++] = i;	
-		bit = 0;
-		i = 0;
-	}
-	if (x == len)
+	if (bit == 7 && boul == 1)
 	{
-		x = 0;
+		tab[x++] = i;
+		i = 0;
+		bit = 0;
+	}
+	else if (x == len)
+	{
+		tab[++x] = '\0';
+ 		x = 0;
 		while (tab[x])
+
 		{
 			ft_printf("%d", tab[x]);
 			x++;
@@ -40,18 +40,22 @@ void	ft_checkeur(int signal)
 	static int	bit = 0;
 	static int	i  = 0 ;
 	static int boul = 0;
-	static int	len = 0;
+	static char	*tab;
+	static int	len = -1;
 
 	if (signal == SIGUSR1)
 		i |= (0x01 << bit);
-	bit++;
 	if (bit == 31)
 	{
 		bit = 0;
 		boul = 1;
+		tab = malloc(i + 1);
 		len = i;
+		ft_printf("len : %d\n", len);
+		i = 0;
 	}
-	bit_8_and_print(bit, i, len, boul);
+	stock_and_print(tab, i, len, bit, boul);
+	bit++;
 }
 
 int	main(int argc, char **argv)
@@ -65,12 +69,12 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 	pid = getpid();
-	ft_printf("%d, pid :", pid);
-	while (argc == 1)
+	ft_printf("pid : %d\n", pid);
+	signal(SIGUSR1, ft_checkeur);
+	signal(SIGUSR2, ft_checkeur);
+	while (1)
 	{
-		signal(SIGUSR1, ft_checkeur);
-		signal(SIGUSR2, ft_checkeur);
-		//pause ();
+		pause ();
 	}
 	return (0);
 }

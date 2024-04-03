@@ -6,7 +6,7 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 17:36:02 by Laubry            #+#    #+#             */
-/*   Updated: 2024/03/29 12:28:09 by laubry           ###   ########.fr       */
+/*   Updated: 2024/04/03 17:19:59 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void len_of_bits(char **argv, int pid)
 
 	bit = 0;
 	i =	ft_strlen(argv[2]);
+	ft_printf("len : %d\n", i);
 	while (bit < 32)
 	{
 		if ((i & (0x01 << bit)) != 0) 
@@ -26,6 +27,7 @@ void len_of_bits(char **argv, int pid)
 		else
 			kill(pid, SIGUSR2);
 		bit++;
+		usleep(50);
 	}
 }
 
@@ -41,6 +43,7 @@ void	send_bit(int pid, char x)
 		else
 			kill(pid, SIGUSR2);
 		bit++;
+		usleep(50);
 	}
 }
 
@@ -59,7 +62,7 @@ int	main(int argc, char **argv)
 		len_of_bits(argv, pid);
 		while(argv[2][i])
 		{
-			send_bit(pid, argv[2][i]);
+			//send_bit(pid, argv[2][i]);
 			i++;
 		}
 		// '/n'
