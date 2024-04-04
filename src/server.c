@@ -6,28 +6,27 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 17:36:50 by Laubry            #+#    #+#             */
-/*   Updated: 2024/04/03 17:30:22 by laubry           ###   ########.fr       */
+/*   Updated: 2024/04/04 18:58:55 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	stock_and_print(char *tab, int i, int len, int bit, int boul)
+void	stock_and_print(char *tab, int *i, int len, int *bit, int boul)
 {
 	static int	x;
 
-	if (bit == 7 && boul == 1)
+	if (*bit == 7 && boul == 1)
 	{
-		tab[x++] = i;
-		i = 0;
-		bit = 0;
+		tab[x++] = *i;
+		*i = 0;
+		*bit = -1;
 	}
-	else if (x == len)
+	if (x == len)
 	{
 		tab[++x] = '\0';
  		x = 0;
 		while (tab[x])
-
 		{
 			ft_printf("%d", tab[x]);
 			x++;
@@ -37,15 +36,16 @@ void	stock_and_print(char *tab, int i, int len, int bit, int boul)
 
 void	ft_checkeur(int signal)
 {
-	static int	bit = 0;
-	static int	i  = 0 ;
+	static int	bit;
+	static int	i;
 	static int boul = 0;
 	static char	*tab;
 	static int	len = -1;
 
+	//ft_printf("|%c%d", signal==SIGUSR1?'@':' ', bit);
 	if (signal == SIGUSR1)
 		i |= (0x01 << bit);
-	if (bit == 31)
+	if (bit == 31 && boul == 0)
 	{
 		bit = 0;
 		boul = 1;
@@ -53,8 +53,9 @@ void	ft_checkeur(int signal)
 		len = i;
 		ft_printf("len : %d\n", len);
 		i = 0;
+		return ;
 	}
-	stock_and_print(tab, i, len, bit, boul);
+	stock_and_print(tab, &i, len, &bit, boul);
 	bit++;
 }
 
