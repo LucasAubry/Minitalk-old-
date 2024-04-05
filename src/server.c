@@ -6,7 +6,7 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 17:36:50 by Laubry            #+#    #+#             */
-/*   Updated: 2024/04/04 18:58:55 by laubry           ###   ########.fr       */
+/*   Updated: 2024/04/05 17:32:52 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	stock_and_print(char *tab, int *i, int len, int *bit, int boul)
 {
 	static int	x;
 
+	x = 0;
 	if (*bit == 7 && boul == 1)
 	{
 		tab[x++] = *i;
@@ -25,12 +26,7 @@ void	stock_and_print(char *tab, int *i, int len, int *bit, int boul)
 	if (x == len)
 	{
 		tab[++x] = '\0';
- 		x = 0;
-		while (tab[x])
-		{
-			ft_printf("%d", tab[x]);
-			x++;
-		}
+		ft_putendl_fd(tab, 1);
 	}
 }
 
@@ -38,11 +34,10 @@ void	ft_checkeur(int signal)
 {
 	static int	bit;
 	static int	i;
-	static int boul = 0;
+	static int	boul = 0;
 	static char	*tab;
 	static int	len = -1;
 
-	//ft_printf("|%c%d", signal==SIGUSR1?'@':' ', bit);
 	if (signal == SIGUSR1)
 		i |= (0x01 << bit);
 	if (bit == 31 && boul == 0)
@@ -79,20 +74,3 @@ int	main(int argc, char **argv)
 	}
 	return (0);
 }
-
-/*
-
-0110100 |= 01111111
-0110100 &= 01111111
-
-0111
-
-
-
-if (1 | 0)
-if (0)
-
-
-
-
-*/

@@ -6,7 +6,7 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 17:06:57 by Laubry            #+#    #+#             */
-/*   Updated: 2024/03/22 17:30:04 by Laubry           ###   ########.fr       */
+/*   Updated: 2024/04/05 18:25:46 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,11 @@
 #include "libft_up.h"
 #include <signal.h>
 
+typedef struct s_ministuct
+{
+	int 	boul;
+	char	*tab;
+	int		len;	
+}	p_ministruct; 
 
 #endif
