@@ -6,50 +6,59 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 17:36:50 by Laubry            #+#    #+#             */
-/*   Updated: 2024/04/09 10:44:50 by laubry           ###   ########.fr       */
+/*   Updated: 2024/04/09 13:04:40 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	stock_and_print(char *tab, int *i, int *bit, int boul, int len)
+int	stock_and_print(char *tab, int *i, int *bit, int *intab)
 {
 	static int	x = 0;
 
-	if (*bit == 7 && boul == 1)
+	if (*bit == 7 && intab[1] == 1)
 	{
 		tab[x++] = *i;
 		*i = 0;
 		*bit = -1;
 	}
-	if (x == len)
+	if (x == intab[2])
 	{
 		tab[++x] = '\0';
 		ft_putendl_fd(tab, 1);
+		*i = 0;
+		*bit = -1;
+		x = 0;
+		return (1);
 	}
+	return (0);
 }
 
 void	ft_checkeur(int signal)
 {
-	static int	bit;
-	static int	i;
-	static int	boul = 0;
+	static int	intab[3] = {0, 0, -1};
+	static int	bit = 0;
+	static int	i = 0;
 	static char	*tab;
-	static int	len = -1;
 
 	if (signal == SIGUSR1)
 		i |= (0x01 << bit);
-	if (bit == 31 && boul == 0)
+	if (bit == 31 && intab[1] == 0)
 	{
 		bit = 0;
-		boul = 1;
+		intab[1] = 1;
 		tab = malloc(i + 1);
-		len = i;
-		ft_printf("len : %d\n", len);
+		intab[2] = i;
+		ft_printf("len : %d\n", intab[2]);
 		i = 0;
 		return ;
 	}
-	stock_and_print(tab, &i, &bit, boul, len);
+	if (stock_and_print(tab, &i, &bit, intab) == 1)
+	{
+		intab[1] = 0;
+		intab[2] = -1;
+		free(tab);
+	}
 	bit++;
 }
 
