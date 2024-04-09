@@ -6,17 +6,16 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 17:36:50 by Laubry            #+#    #+#             */
-/*   Updated: 2024/04/05 17:32:52 by laubry           ###   ########.fr       */
+/*   Updated: 2024/04/09 10:44:50 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	stock_and_print(char *tab, int *i, int len, int *bit, int boul)
+void	stock_and_print(char *tab, int *i, int *bit, int boul, int len)
 {
-	static int	x;
+	static int	x = 0;
 
-	x = 0;
 	if (*bit == 7 && boul == 1)
 	{
 		tab[x++] = *i;
@@ -50,7 +49,7 @@ void	ft_checkeur(int signal)
 		i = 0;
 		return ;
 	}
-	stock_and_print(tab, &i, len, &bit, boul);
+	stock_and_print(tab, &i, &bit, boul, len);
 	bit++;
 }
 
