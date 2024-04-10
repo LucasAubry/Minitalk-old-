@@ -6,7 +6,7 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 17:36:02 by Laubry            #+#    #+#             */
-/*   Updated: 2024/04/09 13:04:14 by laubry           ###   ########.fr       */
+/*   Updated: 2024/04/10 09:27:30 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	len_of_bits(char **argv, int pid)
 		else
 			kill(pid, SIGUSR2);
 		bit++;
-		usleep(50);
+		pause();
+		usleep(5);
 	}
 }
 
@@ -42,8 +43,14 @@ void	send_bit(int pid, char x)
 		else
 			kill(pid, SIGUSR2);
 		bit++;
-		usleep(50);
+		pause();
+		usleep(5);
 	}
+}
+
+void	recup(int signal)
+{
+	(void)signal;
 }
 
 int	main(int argc, char **argv)
@@ -53,6 +60,9 @@ int	main(int argc, char **argv)
 
 	pid = 0;
 	i = 0;
+	static const struct sigaction	act = (struct sigaction)
+	{ .sa_handler = recup};
+	sigaction(SIGUSR1, &act, NULL);
 	if (argc == 3)
 	{
 		pid = ft_atoi(argv[1]);

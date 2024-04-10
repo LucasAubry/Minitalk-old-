@@ -6,7 +6,7 @@
 /*   By: Laubry <aubrylucas.pro@gmail.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 17:36:50 by Laubry            #+#    #+#             */
-/*   Updated: 2024/04/09 13:04:40 by laubry           ###   ########.fr       */
+/*   Updated: 2024/04/10 09:36:59 by laubry           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,10 @@ void	ft_checkeur(int signal)
 	{
 		bit = 0;
 		intab[1] = 1;
-		tab = malloc(i + 1);
+		if (i < 0)
+			return ;
+		tab = malloc(sizeof(int) * (i + 1));
 		intab[2] = i;
-		ft_printf("len : %d\n", intab[2]);
 		i = 0;
 		return ;
 	}
@@ -62,20 +63,27 @@ void	ft_checkeur(int signal)
 	bit++;
 }
 
+void	recup(int signal, siginfo_t *info, void *nothing)
+{
+	ft_checkeur(signal);
+	kill(info->si_pid, SIGUSR1);
+	(void) nothing;
+}
+
 int	main(int argc, char **argv)
 {
-	int	pid;
-
+	static const struct sigaction	act = (struct sigaction)
+	{.sa_sigaction = recup, .sa_flags = SA_SIGINFO};
 	(void)argv;
+
 	if (argc != 1)
 	{
 		ft_printf("pas d'arguments autorises");
 		return (0);
 	}
-	pid = getpid();
-	ft_printf("pid : %d\n", pid);
-	signal(SIGUSR1, ft_checkeur);
-	signal(SIGUSR2, ft_checkeur);
+	ft_printf("pid : %d\n", getpid());
+	sigaction(SIGUSR1, &act, NULL);
+	sigaction(SIGUSR2, &act, NULL);
 	while (1)
 	{
 		pause ();
